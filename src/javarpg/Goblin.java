@@ -1,8 +1,8 @@
-package lastwork;
+package javarpg;
 
 public class Goblin extends Monster{
 	this.hp = 1000;
-	}
+
 public void run() {
 	System.out.println("ゴブリン" + this.name + "は逃げた.");
 }
