@@ -1,7 +1,7 @@
 package javarpg;
 
 public abstract class Monster extends Character{
-	protected int maxDamage = 100;
+	protected int attackPower = 100;
 	
     public abstract void attack(int damage);
 
