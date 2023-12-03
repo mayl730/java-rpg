@@ -5,8 +5,7 @@ public abstract class Monster extends Character{
 	
     public abstract void attack(int damage);
 
-    public boolean run() {
-        System.out.println(this.name + "は逃げた.");
-        return true;
-    }
+	public void run() {
+		System.out.println(this.name + "は逃げた");
+	}
 }

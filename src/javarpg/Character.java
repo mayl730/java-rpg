@@ -4,6 +4,11 @@ public abstract class Character {
 		protected String name;
 		protected int hp;
 		protected int attackPower;
+		protected int initialHp;
+		
+	    public Character() {
+	        this.initialHp = hp;
+	    }
 	    
 	    public String getName() {
 	        return name;
@@ -23,5 +28,13 @@ public abstract class Character {
 	    }   
 	    public void setAttackPower(int attackPower) {
 	        this.attackPower = attackPower;
-	    }    
+	    }
+	    
+	    public void receiveDamage(int damage) {
+	        this.hp -= damage;
+	        if (this.hp < 0) {
+	            this.hp = 0;
+	        }
+	    }
+	    
 }

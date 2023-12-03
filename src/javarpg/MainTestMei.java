@@ -8,8 +8,13 @@ public class MainTestMei {
 	        goblin.setAttackPower(100);
 
 	        goblin.attack(100);
-	        boolean didRun = goblin.run();
+	        
+	        int attackPower = goblin.getAttackPower();
+	        goblin.receiveDamage(10);
+	        int newHp = goblin.getHp();
+	        System.out.println("HP" + newHp);
+	        
 
-	        System.out.println("Did the goblin run away? " + didRun);
+	        System.out.println("Did the goblin run away? " + attackPower);
 	    }
 }
