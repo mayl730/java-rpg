@@ -1,6 +1,8 @@
 package javarpg;
 
 public class Hero extends Player{
+	
+	@Override
 	public void talk() {
 		System.out.println(this.name + ": 悪い奴らには絶対に負けない！");
 	}
