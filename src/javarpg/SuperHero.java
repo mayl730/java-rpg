@@ -1,8 +1,8 @@
 package javarpg;
 
 public class SuperHero extends Hero{
-	boolean isFlying = false;
-	int attackRatio = 2;
+	protected boolean isFlying = false;
+	protected int attackRatio = 2;
 	
 	@Override
 	public void talk() {
@@ -33,6 +33,10 @@ public class SuperHero extends Hero{
 		} else {
 			System.out.println("空を⾶んだ状態ではないから、着陸できない");	
 		}
+	}
+	
+	public boolean getIsFlying() {
+		return isFlying;
 	}
 	
 	

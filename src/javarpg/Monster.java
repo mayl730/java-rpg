@@ -2,10 +2,11 @@ package javarpg;
 
 public abstract class Monster extends Character{
 	protected int attackPower = 100;
+	
 	protected boolean canAttackPlayer(Player player) {
         if (player instanceof SuperHero) {
             SuperHero superHero = (SuperHero) player;
-            if (superHero.isFlying) {
+            if (superHero.getIsFlying()) {
             	System.out.println(superHero.getName() + "は空中にいるため、" + this.name + "の攻撃は効かない！");
                 return false;
             }
