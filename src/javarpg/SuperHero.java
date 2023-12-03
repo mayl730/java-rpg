@@ -1,7 +1,7 @@
 package javarpg;
 
 public class SuperHero extends Hero{
-	boolean flying = false;
+	boolean isFlying = false;
 	int attackRatio = 2;
 	
 	@Override
@@ -15,28 +15,19 @@ public class SuperHero extends Hero{
 		System.out.println(this.name + "はスーパー攻撃" + superDamage + "を与えた");
 	}
 	
-    @Override
-    public void receiveDamage(int damage) {
-        if (!flying) {
-            super.receiveDamage(damage);
-        } else {
-            System.out.println(this.name + "は空中にいるため、攻撃は効かない！");
-        }
-    }
-	
 	public void fly() {
-		if(flying) {
+		if(this.isFlying) {
 			System.out.println(this.name + "はすでに飛んでいる");
 		} else {
-			this.flying = true;
+			this.isFlying = true;
 			this.attackRatio = 1;
 			System.out.println(this.name + "は空を飛ぶ");
 		}
 	}
 	
 	public void land() {
-		if(this.flying) {
-			this.flying = false;
+		if(this.isFlying) {
+			this.isFlying = false;
 			this.attackRatio = 2;
 			System.out.println(this.name + "は着陸した。");
 		} else {

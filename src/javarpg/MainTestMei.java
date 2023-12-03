@@ -26,10 +26,18 @@ public class MainTestMei {
 	        
 	        System.out.println(hero.getHp() +"  "+ goblin.getHp());
 	        
+		 // Try Super Hero attack
 	        superHero.attack(9, goblin);
 	        goblin.attack(20, superHero);      
 	        
-	        System.out.println(hero.getHp() +"  "+ goblin.getHp());
+	        System.out.println(superHero.getHp() +"  "+ goblin.getHp());
+	        
+	      // Try attack when flying
+	        superHero.fly();
+	        goblin.attack(10, superHero);  
+	        superHero.land();
+	        goblin.attack(10, superHero); 
+	        System.out.println(superHero.getHp() +"  "+ goblin.getHp());
 
 	    }
 }
