@@ -10,9 +10,9 @@ public class SuperHero extends Hero{
 	}
 	@Override
 	public void attack (int damage, Monster monster) {
-		int magicalDamage = (int) Math.round(damage * attackRatio);
-        monster.receiveDamage(magicalDamage);
-		System.out.println(this.name + "は攻撃" + damage + "を与えた");
+		int superDamage = (int) Math.round(damage * attackRatio);
+        monster.receiveDamage(superDamage);
+		System.out.println(this.name + "はスーパー攻撃" + superDamage + "を与えた");
 	}
 	
     @Override
