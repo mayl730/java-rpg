@@ -30,6 +30,7 @@ public abstract class Character {
 	        this.attackPower = attackPower;
 	    }
 	    
+	    // キャラがダメージを受けるメソッド
 	    public void receiveDamage(int damage) {
 	        this.hp -= damage;
 	        if (this.hp < 0) {
