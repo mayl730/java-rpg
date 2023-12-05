@@ -4,9 +4,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    static final int HeroMaxHp = 400;
-    static final int SuperHeroMaxHp = 800; 
-    static final int HeroAttackPower = 100;
+    static final int heroMaxHp = 400;
+    static final int superHeroMaxHp = 800; 
+    static final int heroAttackPower = 100;
     static final double FlyHeroAttackReduceRatio = 0.6;
     static final String[] Enemies = {"スライム","ゴブリン","狼男","魔王"};
     static int[] encounterTimes = {0,0,0}; //count the times that each enemy appeared
@@ -34,7 +34,7 @@ public class Main {
         System.out.println("勇者の名前を付けて下さい: ");
         String hname = scanner.nextLine();
         hero.setName(hname);
-        hero.setHp(HeroMaxHp);
+        hero.setHp(heroMaxHp);
 //        hero.setAttackPower(HeroAttackPower);
         System.out.println("勇者（" + hero.getName() + ")が誕生した。");
         System.out.println("勇者（" + hero.getName() + ")が王様に会いに行って、王様と出会った。");
@@ -112,7 +112,7 @@ public class Main {
 
         System.out.println("勇者(" + hero.getName() + ")はスーパー勇者に成長した！");
         superHero.setName(hero.getName());
-        superHero.setHp(SuperHeroMaxHp);
+        superHero.setHp(superHeroMaxHp);
 //        superHero.setAttackPower(HeroAttackPower*2);
         System.out.println("スーパー勇者（" + superHero.getName() + "）は冒険に出かけた。");
         ventureloop = true;
@@ -183,7 +183,7 @@ public class Main {
         switch(actionNum){
             case 1:
 //                int damage = random.nextInt(hero.getAttackPower());
-            	int damage = random.nextInt(HeroAttackPower);
+            	int damage = random.nextInt(heroAttackPower);
                 hero.attack(damage, monster);
 //                monster.receiveDamage(damage);
                 if(monster.getHp() == 0){
@@ -194,7 +194,7 @@ public class Main {
                 }
             case 2:
                 hero.sleep();
-                hero.setHp(HeroMaxHp);
+                hero.setHp(heroMaxHp);
                 return true;
             case 3:
                 hero.run();
@@ -209,7 +209,7 @@ public class Main {
         Random random = new Random();
         switch(actionNum){
             case 1:
-                int damage = random.nextInt(HeroAttackPower);
+                int damage = random.nextInt(heroAttackPower);
 //                if(superHero.getIsFlying()){
 //                    damage = (int)Math.round(damage * FlyHeroAttackReduceRatio);
 //                }
@@ -223,7 +223,7 @@ public class Main {
                 }
             case 2:
                 superHero.sleep();
-                superHero.setHp(SuperHeroMaxHp);
+                superHero.setHp(superHeroMaxHp);
                 return true;
             case 3:
                 superHero.run();
@@ -243,7 +243,7 @@ public class Main {
 
     public static boolean wizardAction(String enemy, Wizard wizard, Monster monster){
         Random random = new Random();
-        int damage = random.nextInt(HeroAttackPower);
+        int damage = random.nextInt(heroAttackPower);
         wizard.attack(damage,monster);
 //        monster.receiveDamage(damage);
         if(monster.getHp() == 0){
@@ -256,7 +256,7 @@ public class Main {
     public static boolean monsterAction(String enemy, Player player, Monster monster){
         Random random = new Random();
         int actionAuto = random.nextInt(5);
-        int damage = random.nextInt(HeroAttackPower);
+        int damage = random.nextInt(heroAttackPower);
         if(actionAuto == 0){    //when the random number comes to be 0 (Possibilty: 20%), the monster will escape
             monster.run();   
             return false;
@@ -281,7 +281,7 @@ public class Main {
             demonKing.run();
             return false;
         }
-        int damage = random.nextInt(HeroAttackPower);
+        int damage = random.nextInt(heroAttackPower);
         if(demonKing.canAttackPlayer(superHero)){
             demonKing.attack(damage,superHero);
 //            superHero.receiveDamage(damage);
