@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 public class Main {
     static final int HeroMaxHp = 100;
-    static final int SuperHeroMaxHp = 200;
-    static final String[] Enemies = {"スライム","ゴブリン","狼男"};
+    static final int SuperHeroMaxHp = 200; 
+    static final int HeroAttackPower = 100;
+    static final double FlyHeroAttackReduceRatio = 0.6;
+    static final String[] Enemies = {"スライム","ゴブリン","狼男","魔王"};
     static int[] encounterTimes = {0,0,0}; //count the times that each enemy appeared
     static int enemyNum = 0;
     public static void main(String[] args){
@@ -17,31 +19,32 @@ public class Main {
         SuperHero superHero = new SuperHero();
         Wizard wizard = new Wizard();
         Monster monster;
-        Slime slime = new Slime();
-        Goblin goblin = new Goblin();
-        Wolfman wolfMan = new Wolfman();
         DemonKing demonKing = new DemonKing();
         King king = new King();
         Princess princess = new Princess();
-        
-        System.out.println("勇者の名前を付けて下さい: ");
-        String hname = scanner.nextLine();
-        hero.setName(hname);
-        System.out.println("勇者（" + hero.getName() + ")が誕生した。");
-        System.out.println("勇者（" + hero.getName() + ")が王様に会いに行って、王様と出会った。");
-        king.talk();
-        System.out.println("「魔王を倒して、お姫様を助け出す」使命を受けった。");
-        System.out.println("勇者（" + hero.name + "）は冒険に出かけた。");
+
         boolean ventureloop = true;
         boolean battleloop = false;
         boolean withWizard = false;
-        int enemyAction = 0;
         int actionNum = 0;
-        int enemyActionNum = 0;
+        
+        //Game Start -------------------------------------------
+        System.out.println("勇者の名前を付けて下さい: ");
+        String hname = scanner.nextLine();
+        hero.setName(hname);
+        hero.setHp(HeroMaxHp);
+        hero.setAttackPower(HeroAttackPower);
+        System.out.println("勇者（" + hero.getName() + ")が誕生した。");
+        System.out.println("勇者（" + hero.getName() + ")が王様に会いに行って、王様と出会った。");
+        king.talk();
+        hero.talk();
+        System.out.println("「魔王を倒して、お姫様を助け出す」使命を受けった。");
+        System.out.println("勇者（" + hero.getName() + "）は冒険に出かけた。");
+
         while(ventureloop){
-            enemyNum = random.nextInt(3);
+            enemyNum = random.nextInt(3); //random with number 0 to meet slime, 1 to goblin, 2 to wolfman
             System.out.println(Enemies[enemyNum] + "に出会った、バトルが始まる");
-            if(enemyNum == 0){
+            if(enemyNum == 0){  //すべて種類のmonsterに出会ったかどうかを判断するため
                 monster = new Slime();
                 encounterTimes[0]++;
             }else if(enemyNum == 1){
@@ -59,38 +62,103 @@ public class Main {
                 battleloop = playerAction(actionNum, Enemies[enemyNum], hero, monster);
                 if(!battleloop){break;}
                 if(withWizard==true){
-
+                    battleloop = wizardAction(Enemies[enemyNum], wizard, monster);
+                    if(!battleloop){break;}
                 }
-            } 
+                battleloop = monsterAction(Enemies[enemyNum], hero, monster);
+                if(!battleloop){break;}
+            }
 
-            if(random.nextInt(3)==0){
+            //meet with wizard
+            if(withWizard==false && random.nextInt(3)==0){
                 System.out.println("スペシャル・イベント！");
-                if(withWizard==false){
-                    System.out.println("魔法使いと出会った、冒険の仲間になるように誘う。");
-                    if(random.nextInt(2)==0){
-                        withWizard = true;
-                        System.out.println("魔法使いは仲間になった。");
-                    }else{
-                        System.out.println("魔法使いは仲間になってくれなかった。");
-                    }
+                System.out.println("魔法使いと出会った、冒険の仲間になるように誘う。");
+                if(random.nextInt(2)==0){
+                    withWizard = true;
+                    System.out.println("魔法使いは仲間になった。");
+                    wizard.setAttackPower(HeroAttackPower);
+                }else{
+                    System.out.println("魔法使いは仲間になってくれなかった。"); 
                 }
             }
 
             if(encounterTimes[0]!=0 && encounterTimes[1]!=0 && encounterTimes[2]!=0 && withWizard==true){
                 ventureloop = false;
+            }   //すべて種類のモンスターを倒れるか、魔法使いを仲間になれるかを判断する
+        }
+
+        System.out.println("勇者(" + hero.getName() + ")はスーパー勇者に成長した！");
+        superHero.setName(hero.getName());
+        superHero.setHp(SuperHeroMaxHp);
+        superHero.setAttackPower(HeroAttackPower*2);
+        System.out.println("スーパー勇者（" + superHero.getName() + "）は冒険に出かけた。");
+        ventureloop = true;
+        while(ventureloop){ //superHero's venture
+            enemyNum = random.nextInt(4); //random with number 0 to meet slime, 1 to goblin, 2 to wolfman, 3 to demonKing
+            if(enemyNum < 3){
+                System.out.println(Enemies[enemyNum] + "に出会った、バトルが始まる");
+                battleloop = true;
+                while(battleloop){
+                    System.out.println("スーパー勇者(" + superHero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
+                    actionNum = scanner.nextInt();
+                    if(enemyNum == 0){
+                        monster = new Slime();
+                    }else if(enemyNum == 1){
+                        monster = new Goblin();
+                    }else{
+                        monster = new Wolfman();
+                    }
+                    battleloop = superAction(actionNum, Enemies[enemyNum], superHero, monster);
+                    if(!battleloop){break;}
+                    battleloop = wizardAction(Enemies[enemyNum], wizard, monster);
+                    if(!battleloop){break;}
+                    battleloop = monsterAction(Enemies[enemyNum], superHero, monster);
+                    if(!battleloop){break;}
+                }
+            }else{
+                ventureloop = false;
             }
+        }
+
+        //final battle: Encounter with princess, Battle with the Demon King
+        System.out.println("姫様に出会った。");
+        princess.talk();
+        System.out.println("魔王が現れた。");
+        demonKing.talk();
+        demonKing.setAttackPower(HeroAttackPower*5);
+        superHero.talk();
+        System.out.println("バトルが始まる！");
+        battleloop = true;
+        while(battleloop){
+            System.out.println("スーパー勇者(" + superHero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
+            actionNum = scanner.nextInt();
+            if(enemyNum == 0){
+                monster = new Slime();
+            }else if(enemyNum == 1){
+                monster = new Goblin();
+            }else{
+                monster = new Wolfman();
+            }
+            princess.cheer(superHero);
+            battleloop = superAction(actionNum, Enemies[enemyNum], superHero, monster);
+            if(!battleloop){break;}
+            battleloop = wizardAction(Enemies[enemyNum], wizard, monster);
+            if(!battleloop){break;}
+            battleloop = demonKingAction(superHero, demonKing);
+            if(!battleloop){break;}
         }
         scanner.close();
     }
+    //---------------------------------- Main method End -----------------------------------------------
 
+    //method
     public static boolean playerAction(int actionNum, String enemy, Hero hero, Monster monster){
         Random random = new Random();
         switch(actionNum){
             case 1:
                 int damage = random.nextInt(hero.getAttackPower());
-                hero.attack(damage);
+                hero.attack(damage, monster);
                 monster.receiveDamage(damage);
-                System.out.println(enemy + "は" + damage + "点ダメージを受けった、残るHPは" + monster.getHp());
                 if(monster.getHp() == 0){
                     System.out.println(enemy + "を倒した、戦闘終了。");
                     return false;
@@ -108,6 +176,97 @@ public class Main {
             default:
                 System.out.println("勇者(" + hero.getName() + "何もしなかった。");
                 return true;
+        }
+    }
+    public static boolean superAction(int actionNum, String enemy, SuperHero superHero, Monster monster){
+        Random random = new Random();
+        switch(actionNum){
+            case 1:
+                int damage = random.nextInt(superHero.getAttackPower());
+                if(superHero.getIsFlying()){
+                    damage = (int)Math.round(damage * FlyHeroAttackReduceRatio);
+                }
+                superHero.attack(damage, monster);
+                monster.receiveDamage(damage);
+                if(monster.getHp() == 0){
+                    System.out.println(enemy + "を倒した、戦闘終了。");
+                    return false;
+                }else{
+                    return true;
+                }
+            case 2:
+                superHero.sleep();
+                superHero.setHp(SuperHeroMaxHp);
+                return true;
+            case 3:
+                superHero.run();
+                encounterTimes[enemyNum]--;
+                return false;
+            case 4:
+                superHero.fly();
+                return true;
+            case 5:
+                superHero.land();
+                return true;
+            default:
+                System.out.println("スーパー勇者(" + superHero.getName() + "何もしなかった。");
+                return true;
+        }
+    }
+
+    public static boolean wizardAction(String enemy, Wizard wizard, Monster monster){
+        Random random = new Random();
+        int damage = random.nextInt(wizard.getAttackPower());
+        wizard.attack(damage,monster);
+        monster.receiveDamage(damage);
+        if(monster.getHp() == 0){
+            System.out.println(enemy + "を倒した、戦闘終了。");
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean monsterAction(String enemy, Player player, Monster monster){
+        Random random = new Random();
+        int actionAuto = random.nextInt(5);
+        int damage = random.nextInt(monster.getAttackPower());
+        if(actionAuto == 0){    //when the random number comes to be 0 (Possibilty: 20%), the monster will escape
+            monster.run();
+            return false;
+        }
+        if(monster.canAttackPlayer(player)){
+            monster.attack(damage,player);
+            player.receiveDamage(damage);
+            if(player.getHp() == 0){
+                System.out.println(player.name + "は倒られた、戦闘終了。");
+                System.out.println("ゲームオーバー！");
+                System.exit(0);
+            }
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public static boolean demonKingAction(SuperHero superHero, DemonKing demonKing){
+        Random random = new Random();
+        int actionAuto = random.nextInt(10);
+        if(actionAuto == 0){    //when the random number comes to be 0 (Possibilty: 10%), demonKing will escape and superHero will win. Gameover.
+            demonKing.run();
+            return false;
+        }
+        int damage = random.nextInt(demonKing.getAttackPower());
+        if(demonKing.canAttackPlayer(superHero)){
+            demonKing.attack(damage,superHero);
+            superHero.receiveDamage(damage);
+            if(superHero.getHp() == 0){
+                System.out.println(superHero.name + "は倒られた、戦闘終了。");
+                System.out.println("ゲームオーバー！");
+                System.exit(0);
+            }
+            return false;
+        }else{
+            return true;
         }
     }
 }
