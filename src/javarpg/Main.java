@@ -4,12 +4,13 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    static final int HeroMaxHp = 100;
-    static final int SuperHeroMaxHp = 200; 
-    static final int HeroAttackPower = 50;
+    static final int HeroMaxHp = 400;
+    static final int SuperHeroMaxHp = 800; 
+    static final int HeroAttackPower = 100;
     static final double FlyHeroAttackReduceRatio = 0.6;
     static final String[] Enemies = {"スライム","ゴブリン","狼男","魔王"};
     static int[] encounterTimes = {0,0,0}; //count the times that each enemy appeared
+    static int[] killedTimes = {0,0,0}; //count the times that each enemy appeared
     static int enemyNum = 0;
     
     public static void main(String[] args){
@@ -43,6 +44,8 @@ public class Main {
         System.out.println("勇者（" + hero.getName() + "）は冒険に出かけた。");
 
         while(ventureloop){
+        	System.out.println("Debug: Monster Killed time: スライム=" + killedTimes[0] + " ゴブリン="+killedTimes[1]+" 狼男="+killedTimes[2]);
+    
             enemyNum = random.nextInt(3); //random with number 0 to meet slime, 1 to goblin, 2 to wolfman
             
             System.out.println(Enemies[enemyNum] + "に出会った、バトルが始まる");
@@ -65,17 +68,27 @@ public class Main {
             }
 
             battleloop = true;
+            
             while(battleloop){
+            	System.out.println("Debug: Your HP:" +hero.getHp() + " Monster HP:" + monster.getHp());
+            	
                 System.out.println("勇者(" + hero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる」:");
                 actionNum = scanner.nextInt();
                 battleloop = playerAction(actionNum, Enemies[enemyNum], hero, monster);
                 
+                int monsterHp = monster.getHp();
+            	if (monsterHp == 0) {
+            		killedTimes[enemyNum]++;
+            	}
+//            	System.out.println("Debug: Your HP:" +hero.getHp() + "Monster HP:" + monster.getHp());
                 if(!battleloop){break;}
+           
                 if(withWizard==true){
                     battleloop = wizardAction(Enemies[enemyNum], wizard, monster);
                     if(!battleloop){break;}
                 }
                 battleloop = monsterAction(Enemies[enemyNum], hero, monster);
+//                System.out.println("battleLoop!!!!!" + battleloop);
                 if(!battleloop){break;}
             }
 
@@ -92,7 +105,7 @@ public class Main {
                 }
             }
 
-            if(encounterTimes[0]!=0 && encounterTimes[1]!=0 && encounterTimes[2]!=0 && withWizard==true){
+            if(killedTimes[0]!=0 && killedTimes[1]!=0 && killedTimes[2]!=0 && withWizard==true){
                 ventureloop = false;
             }   //すべて種類のモンスターを倒れるか、魔法使いを仲間になれるかを判断する
         }
@@ -103,7 +116,9 @@ public class Main {
 //        superHero.setAttackPower(HeroAttackPower*2);
         System.out.println("スーパー勇者（" + superHero.getName() + "）は冒険に出かけた。");
         ventureloop = true;
-        while(ventureloop){ //superHero's venture
+        
+        //superHero's venture
+        while(ventureloop){ 
             enemyNum = random.nextInt(4); //random with number 0 to meet slime, 1 to goblin, 2 to wolfman, 3 to demonKing
             if(enemyNum < 3){
                 System.out.println(Enemies[enemyNum] + "に出会った、バトルが始まる");
@@ -243,7 +258,7 @@ public class Main {
         int actionAuto = random.nextInt(5);
         int damage = random.nextInt(HeroAttackPower);
         if(actionAuto == 0){    //when the random number comes to be 0 (Possibilty: 20%), the monster will escape
-            monster.run();
+            monster.run();   
             return false;
         }
         if(monster.canAttackPlayer(player)){
@@ -253,11 +268,10 @@ public class Main {
                 System.out.println(player.name + "は倒られた、戦闘終了。");
                 System.out.println("ゲームオーバー！");
                 System.exit(0);
+                return false;
             }
-            return false;
-        }else{
-            return true;
-        }
+        } 
+        return true;
     }
 
     public static boolean demonKingAction(SuperHero superHero, DemonKing demonKing){
