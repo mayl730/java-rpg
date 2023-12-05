@@ -25,6 +25,12 @@ public class SuperHero extends Hero{
 		}
 	}
 	
+	@Override
+	public void sleep() {
+		this.hp = this.initialHp;
+		System.out.println(this.name + "は眠ってHPが完全に回復した" + this.hp);
+	}
+	
 	public void land() {
 		if(this.isFlying) {
 			this.isFlying = false;
