@@ -29,12 +29,17 @@ public class Main {
         
         // Setting Up Player
         Hero hero = new Hero();
+        hero.setAttackPower(heroAttackPower);
+        
         SuperHero superHero = new SuperHero();
         superHero.setHp(superHeroMaxHp);
-        
         Wizard wizard = new Wizard();
+        
+        // Setting Up NPC
         King king = new King();
+        king.setName("王様");
         Princess princess = new Princess();
+        princess.setName("ピーチ姫");
         
         // Setting Up Monsters
         Monster monster;
@@ -73,26 +78,13 @@ public class Main {
             System.out.println(enemies[enemyNum] + "に出会った、バトルが始まる");
            
             monster = createMonster(enemyNum);
-//            if(enemyNum == 0){  //すべて種類のmonsterに出会ったかどうかを判断するため
-//                monster = new Slime();
-//                monster.setHp(50);
-//                monster.setName(enemies[enemyNum]);
-//            }else if(enemyNum == 1){
-//                monster = new Goblin();
-//                monster.setHp(100);
-//                monster.setName(enemies[enemyNum]);
-//            }else{
-//                monster = new Wolfman();
-//                monster.setHp(200);
-//                monster.setName(enemies[enemyNum]);
-//            }
-
             battleloop = true;
             
             while(battleloop){
             	System.out.println("**** 勇者のHP:" +hero.getHp() +" | "+ monster.getName() + "のHP:" + monster.getHp() + " ****");
                 System.out.println("勇者(" + heroName + ")に指示を出してください「1.戦う 2.眠る 3.逃げる」:");
                 actionNum = scanner.nextInt();
+                
                 battleloop = playerAction(actionNum, enemies[enemyNum], hero, monster);
                 
                 int monsterHp = monster.getHp();
@@ -109,27 +101,28 @@ public class Main {
                 if(!battleloop){break;}
             }
 
-            //meet with wizard
-            if(withWizard==false && random.nextInt(3)==0){
+            // meet with wizard
+            if(withWizard == false && random.nextInt(3)==0){
                 System.out.println("スペシャル・イベント！");
                 System.out.println("魔法使いと出会った、冒険の仲間になるように誘う。");
                 if(random.nextInt(2)==0){
                     withWizard = true;
                     System.out.println("魔法使いは仲間になった。");
-//                    wizard.setAttackPower(HeroAttackPower);
                 }else{
                     System.out.println("魔法使いは仲間になってくれなかった。"); 
                 }
             }
-
-            if(killedTimes[0] > 0 && killedTimes[1] > 0 && killedTimes[2] > 0 && withWizard==true){
+            
+            //すべて種類のモンスターを倒れるか、魔法使いを仲間になれるかを判断する
+            if(killedTimes[0] > 0 && killedTimes[1] > 0 && killedTimes[2] > 0 && withWizard == true){
                 ventureloop = false;
-            }   //すべて種類のモンスターを倒れるか、魔法使いを仲間になれるかを判断する
+            }   
         }
 
         System.out.println("勇者(" + heroName + ")はスーパー勇者に成長した！");
         System.out.println("スーパー勇者（" + heroName + "）は冒険に出かけた。");
         ventureloop = true;
+        
         
         // superHero's venture
         while(ventureloop){ 
@@ -137,7 +130,8 @@ public class Main {
         		ventureloop = false;
         		break;
         	}
-        	  enemyNum = random.nextInt(4); //random with number 0 to meet slime, 1 to goblin, 2 to wolfman, 3 to demonKing
+        	  // random with number 0 to meet slime, 1 to goblin, 2 to wolfman, 3 to demonKing
+        	  enemyNum = random.nextInt(4);
               System.out.println(enemies[enemyNum] + "に出会った、バトルが始まる");
               if (enemyNum == 3) {
             	  	System.out.println("姫様に出会った。");
@@ -149,7 +143,7 @@ public class Main {
               if(enemyNum < 3){
                   monster = createMonster(enemyNum);
               } else {
-              	monster = demonKing;
+              	  monster = demonKing;
               }
                battleloop = true;
                while(battleloop){
@@ -164,7 +158,6 @@ public class Main {
                     battleloop = monsterAction(enemies[enemyNum], superHero, monster);
                     if(!battleloop){break;}
                 }
-
         }
         System.out.println("あなたの勝ちた！冒険終了！");
         scanner.close();
@@ -293,7 +286,7 @@ public class Main {
                 monster.setHp(200);	
                 break;
             default:
-                throw new IllegalArgumentException("Invalid enemy number");
+                throw new IllegalArgumentException("0-3を入力してください！");
         }
         monster.setName(enemies[enemyNum]);
         return monster;
