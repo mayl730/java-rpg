@@ -12,7 +12,7 @@ public class Hero extends Player{
 	}
 	public void sleep() {
 		this.hp = this.initialHp;
-		System.out.println(this.name + "は眠ってHPが完全に回復した");
+		System.out.println(this.name + "は眠ってHPが完全に回復した" + this.hp);
 	}
 	public void run() {
 		System.out.println(this.name + "は逃げた");

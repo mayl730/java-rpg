@@ -22,6 +22,8 @@ public class Main {
         Wizard wizard = new Wizard();
         Monster monster;
         DemonKing demonKing = new DemonKing();
+        demonKing.setHp(1000);
+        demonKing.setName("Demon King A");
         King king = new King();
         Princess princess = new Princess();
 
@@ -105,7 +107,7 @@ public class Main {
                 }
             }
 
-            if(killedTimes[0]!=0 && killedTimes[1]!=0 && killedTimes[2]!=0 && withWizard==true){
+            if(killedTimes[0] > 0 && killedTimes[1] > 0 && killedTimes[2] > 0 && withWizard==true){
                 ventureloop = false;
             }   //すべて種類のモンスターを倒れるか、魔法使いを仲間になれるかを判断する
         }
@@ -140,38 +142,40 @@ public class Main {
                     battleloop = monsterAction(Enemies[enemyNum], superHero, monster);
                     if(!battleloop){break;}
                 }
-            }else{
-                ventureloop = false;
+            } else{
+//                ventureloop = false;
+                //final battle: Encounter with princess, Battle with the Demon King
+                System.out.println("姫様に出会った。");
+                princess.talk();
+                System.out.println("魔王が現れた。");
+                demonKing.talk();
+                // demonKing.setAttackPower(HeroAttackPower*5);
+                
+                superHero.talk();
+                System.out.println("バトルが始まる！");
+                boolean battleloopWithDemon = true;
+                while(battleloopWithDemon){
+                	
+                    System.out.println("スーパー勇者(" + superHero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
+                    actionNum = scanner.nextInt();
+                    if(enemyNum == 0){
+                        monster = new Slime();
+                    }else if(enemyNum == 1){
+                        monster = new Goblin();
+                    }else{
+                        monster = new Wolfman();
+                    }
+                    
+                    System.out.println("Debug: Your HP:" +hero.getHp() + " Monster HP:" + monster.getHp());
+                    princess.cheer(superHero);
+                    battleloopWithDemon = superAction(actionNum, Enemies[enemyNum], superHero, monster);
+                    if(!battleloopWithDemon){break;}
+                    battleloopWithDemon = wizardAction(Enemies[enemyNum], wizard, monster);
+                    if(!battleloopWithDemon){break;}
+                    battleloopWithDemon = demonKingAction(superHero, demonKing);
+                    if(!battleloopWithDemon){break;}
+                }
             }
-        }
-
-        //final battle: Encounter with princess, Battle with the Demon King
-        System.out.println("姫様に出会った。");
-        princess.talk();
-        System.out.println("魔王が現れた。");
-        demonKing.talk();
-//        demonKing.setAttackPower(HeroAttackPower*5);
-        
-        superHero.talk();
-        System.out.println("バトルが始まる！");
-        battleloop = true;
-        while(battleloop){
-            System.out.println("スーパー勇者(" + superHero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
-            actionNum = scanner.nextInt();
-            if(enemyNum == 0){
-                monster = new Slime();
-            }else if(enemyNum == 1){
-                monster = new Goblin();
-            }else{
-                monster = new Wolfman();
-            }
-            princess.cheer(superHero);
-            battleloop = superAction(actionNum, Enemies[enemyNum], superHero, monster);
-            if(!battleloop){break;}
-            battleloop = wizardAction(Enemies[enemyNum], wizard, monster);
-            if(!battleloop){break;}
-            battleloop = demonKingAction(superHero, demonKing);
-            if(!battleloop){break;}
         }
         scanner.close();
     }
@@ -194,7 +198,7 @@ public class Main {
                 }
             case 2:
                 hero.sleep();
-                hero.setHp(heroMaxHp);
+//                hero.setHp(heroMaxHp);
                 return true;
             case 3:
                 hero.run();
@@ -223,7 +227,7 @@ public class Main {
                 }
             case 2:
                 superHero.sleep();
-                superHero.setHp(superHeroMaxHp);
+//                superHero.setHp(superHeroMaxHp);
                 return true;
             case 3:
                 superHero.run();
