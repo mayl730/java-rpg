@@ -3,12 +3,24 @@ package javarpg;
 import java.util.Random;
 import java.util.Scanner;
 
+import javarpg.Characters.DemonKing;
+import javarpg.Characters.Goblin;
+import javarpg.Characters.Hero;
+import javarpg.Characters.King;
+import javarpg.Characters.Monster;
+import javarpg.Characters.Player;
+import javarpg.Characters.Princess;
+import javarpg.Characters.Slime;
+import javarpg.Characters.SuperHero;
+import javarpg.Characters.Wizard;
+import javarpg.Characters.Wolfman;
+
 public class Main {
     static final int heroMaxHp = 400;
     static final int superHeroMaxHp = 800; 
     static final int heroAttackPower = 100;
     static final String[] enemies = {"スライム","ゴブリン","狼男","魔王"};
-    static int[] killedTimes = {0,0,0}; //count the times that each enemy killed
+    static int[] killedTimes = {1,1,1}; //count the times that each enemy killed
     static int enemyNum = 0;
     
     public static void main(String[] args){
@@ -18,6 +30,8 @@ public class Main {
         // Setting Up Player
         Hero hero = new Hero();
         SuperHero superHero = new SuperHero();
+        superHero.setHp(superHeroMaxHp);
+        
         Wizard wizard = new Wizard();
         King king = new King();
         Princess princess = new Princess();
@@ -39,13 +53,16 @@ public class Main {
         String hname = scanner.nextLine();
         hero.setName(hname);
         hero.setHp(heroMaxHp);
+       
+        String heroName = hero.getName();
+        superHero.setName(heroName);
         
-        System.out.println("勇者（" + hero.getName() + ")が誕生した。");
-        System.out.println("勇者（" + hero.getName() + ")が王様に会いに行って、王様と出会った。");
+        System.out.println("勇者（" + heroName + ")が誕生した。");
+        System.out.println("勇者（" + heroName + ")が王様に会いに行って、王様と出会った。");
         king.talk();
         hero.talk();
         System.out.println("「魔王を倒して、お姫様を助け出す」使命を受けった。");
-        System.out.println("勇者（" + hero.getName() + "）は冒険に出かけた。");
+        System.out.println("勇者（" + heroName + "）は冒険に出かけた。");
 
         
         while(ventureloop){
@@ -55,25 +72,26 @@ public class Main {
             
             System.out.println(enemies[enemyNum] + "に出会った、バトルが始まる");
            
-            if(enemyNum == 0){  //すべて種類のmonsterに出会ったかどうかを判断するため
-                monster = new Slime();
-                monster.setHp(50);
-                monster.setName(enemies[enemyNum]);
-            }else if(enemyNum == 1){
-                monster = new Goblin();
-                monster.setHp(100);
-                monster.setName(enemies[enemyNum]);
-            }else{
-                monster = new Wolfman();
-                monster.setHp(200);
-                monster.setName(enemies[enemyNum]);
-            }
+            monster = createMonster(enemyNum);
+//            if(enemyNum == 0){  //すべて種類のmonsterに出会ったかどうかを判断するため
+//                monster = new Slime();
+//                monster.setHp(50);
+//                monster.setName(enemies[enemyNum]);
+//            }else if(enemyNum == 1){
+//                monster = new Goblin();
+//                monster.setHp(100);
+//                monster.setName(enemies[enemyNum]);
+//            }else{
+//                monster = new Wolfman();
+//                monster.setHp(200);
+//                monster.setName(enemies[enemyNum]);
+//            }
 
             battleloop = true;
             
             while(battleloop){
             	System.out.println("**** 勇者のHP:" +hero.getHp() +" | "+ monster.getName() + "のHP:" + monster.getHp() + " ****");
-                System.out.println("勇者(" + hero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる」:");
+                System.out.println("勇者(" + heroName + ")に指示を出してください「1.戦う 2.眠る 3.逃げる」:");
                 actionNum = scanner.nextInt();
                 battleloop = playerAction(actionNum, enemies[enemyNum], hero, monster);
                 
@@ -109,11 +127,8 @@ public class Main {
             }   //すべて種類のモンスターを倒れるか、魔法使いを仲間になれるかを判断する
         }
 
-        System.out.println("勇者(" + hero.getName() + ")はスーパー勇者に成長した！");
-        superHero.setName(hero.getName());
-        superHero.setHp(superHeroMaxHp);
-        System.out.println("SuperHero's HP: " + superHero.getHp());
-        System.out.println("スーパー勇者（" + superHero.getName() + "）は冒険に出かけた。");
+        System.out.println("勇者(" + heroName + ")はスーパー勇者に成長した！");
+        System.out.println("スーパー勇者（" + heroName + "）は冒険に出かけた。");
         ventureloop = true;
         
         // superHero's venture
@@ -131,25 +146,15 @@ public class Main {
                     superHero.talk();
                     System.out.println("バトルが始まる！");
                }
-              if(enemyNum == 0){
-                  monster = new Slime();
-                  monster.setHp(50);
-                  monster.setName(enemies[enemyNum]);
-              }else if(enemyNum == 1){
-                  monster = new Goblin();
-                  monster.setHp(100);
-                  monster.setName(enemies[enemyNum]);
-              }else if (enemyNum == 2){
-                  monster = new Wolfman();
-                  monster.setHp(200);
-                  monster.setName(enemies[enemyNum]);
+              if(enemyNum < 3){
+                  monster = createMonster(enemyNum);
               } else {
               	monster = demonKing;
               }
                battleloop = true;
                while(battleloop){
-            	    System.out.println("**** 勇者のHP:" +hero.getHp() +" | "+ monster.getName() + "のHP:" + monster.getHp() + " ****");
-                    System.out.println("スーパー勇者(" + superHero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
+            	    System.out.println("**** 勇者のHP:" + superHero.getHp() +" | "+ monster.getName() + "のHP:" + monster.getHp() + " ****");
+                    System.out.println("スーパー勇者(" + heroName + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
                     actionNum = scanner.nextInt();
                     
                     battleloop = superAction(actionNum, enemies[enemyNum], superHero, monster);
@@ -242,7 +247,7 @@ public class Main {
         if(monster.canAttackPlayer(player)){
             monster.attack(damage,player);
             if(player.getHp() == 0){
-                System.out.println(player.name + "は倒られた、戦闘終了。");
+                System.out.println(player.getName() + "は倒られた、戦闘終了。");
                 System.out.println("ゲームオーバー！");
                 System.exit(0);
                 return false;
@@ -262,7 +267,7 @@ public class Main {
         if(demonKing.canAttackPlayer(superHero)){
             demonKing.attack(damage,superHero);
             if(superHero.getHp() == 0){
-                System.out.println(superHero.name + "は倒られた、戦闘終了。");
+                System.out.println(superHero.getName() + "は倒られた、戦闘終了。");
                 System.out.println("ゲームオーバー！");
                 System.exit(0);
             }
@@ -270,5 +275,27 @@ public class Main {
         }else{
             return true;
         }
+    }
+    
+    public static Monster createMonster(int enemyNum) {
+        Monster monster;
+        switch (enemyNum) {
+            case 0:
+                monster = new Slime();
+                monster.setHp(50);
+                break;
+            case 1:
+                monster = new Goblin();
+                monster.setHp(100);
+                break;
+            case 2:
+                monster = new Wolfman();
+                monster.setHp(200);	
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid enemy number");
+        }
+        monster.setName(enemies[enemyNum]);
+        return monster;
     }
 }

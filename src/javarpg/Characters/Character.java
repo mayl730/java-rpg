@@ -1,4 +1,4 @@
-package javarpg;
+package javarpg.Characters;
 
 public abstract class Character {
 		protected String name;

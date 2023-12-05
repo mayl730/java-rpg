@@ -1,4 +1,4 @@
-package javarpg;
+package javarpg.Characters;
 
 public class DemonKing extends Monster implements TalkInterface{
     public void talk() {

@@ -1,4 +1,4 @@
-package javarpg;
+package javarpg.Characters;
 
 public class Slime extends Monster{
 	 public void attack (int damage, Player player) {

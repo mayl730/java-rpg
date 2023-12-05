@@ -1,4 +1,4 @@
-package javarpg;
+package javarpg.Characters;
 
 public class King extends Player{
 	@Override

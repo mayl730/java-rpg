@@ -1,4 +1,4 @@
-package javarpg;
+package javarpg.Characters;
 
 public class SuperHero extends Hero{
 	protected boolean isFlying = false;
