@@ -7,10 +7,8 @@ public class Main {
     static final int heroMaxHp = 400;
     static final int superHeroMaxHp = 800; 
     static final int heroAttackPower = 100;
-    static final double FlyHeroAttackReduceRatio = 0.6;
     static final String[] Enemies = {"スライム","ゴブリン","狼男","魔王"};
-    static int[] encounterTimes = {0,0,0}; //count the times that each enemy appeared
-    static int[] killedTimes = {1,1,1}; //count the times that each enemy appeared
+    static int[] killedTimes = {0,0,0}; //count the times that each enemy killed
     static int enemyNum = 0;
     
     public static void main(String[] args){
@@ -56,24 +54,20 @@ public class Main {
                 monster = new Slime();
                 monster.setHp(50);
                 monster.setName(Enemies[enemyNum]);
-                encounterTimes[0]++;
             }else if(enemyNum == 1){
                 monster = new Goblin();
                 monster.setHp(100);
                 monster.setName(Enemies[enemyNum]);
-                encounterTimes[1]++;
             }else{
                 monster = new Wolfman();
                 monster.setHp(200);
                 monster.setName(Enemies[enemyNum]);
-                encounterTimes[2]++;
             }
 
             battleloop = true;
             
             while(battleloop){
-            	System.out.println("Debug: Your HP:" +hero.getHp() + " Monster HP:" + monster.getHp());
-            	
+            	System.out.println("**** 勇者のHP:" +hero.getHp() +" | "+ monster.getName() + "のHP:" + monster.getHp() + " ****");
                 System.out.println("勇者(" + hero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる」:");
                 actionNum = scanner.nextInt();
                 battleloop = playerAction(actionNum, Enemies[enemyNum], hero, monster);
@@ -82,7 +76,6 @@ public class Main {
             	if (monsterHp == 0) {
             		killedTimes[enemyNum]++;
             	}
-//            	System.out.println("Debug: Your HP:" +hero.getHp() + "Monster HP:" + monster.getHp());
                 if(!battleloop){break;}
            
                 if(withWizard==true){
@@ -90,7 +83,6 @@ public class Main {
                     if(!battleloop){break;}
                 }
                 battleloop = monsterAction(Enemies[enemyNum], hero, monster);
-//                System.out.println("battleLoop!!!!!" + battleloop);
                 if(!battleloop){break;}
             }
 
@@ -152,7 +144,7 @@ public class Main {
               }
                battleloop = true;
                while(battleloop){
-                    System.out.println("Debug: Your HP:" +superHero.getHp() + " Monster HP:" + monster.getHp());
+            	    System.out.println("**** 勇者のHP:" +hero.getHp() +" | "+ monster.getName() + "のHP:" + monster.getHp() + " ****");
                     System.out.println("スーパー勇者(" + superHero.getName() + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
                     actionNum = scanner.nextInt();
                     
@@ -165,7 +157,6 @@ public class Main {
                 }
 
         }
-
         System.out.println("あなたの勝ちた！冒険終了！");
         scanner.close();
     }
@@ -192,7 +183,6 @@ public class Main {
                 return true;
             case 3:
                 hero.run();
-                encounterTimes[enemyNum]--;
                 return false;
             default:
                 System.out.println("勇者(" + hero.getName() + "何もしなかった。");
@@ -271,14 +261,13 @@ public class Main {
     public static boolean demonKingAction(SuperHero superHero, DemonKing demonKing){
         Random random = new Random();
         int actionAuto = random.nextInt(10);
-        if(actionAuto == 0){    //when the random number comes to be 0 (Possibilty: 10%), demonKing will escape and superHero will win. Gameover.
+        if(actionAuto == 0){    // when the random number comes to be 0 (Possibilty: 10%), demonKing will escape and superHero will win. Gameover.
             demonKing.run();
             return false;
         }
         int damage = random.nextInt(heroAttackPower);
         if(demonKing.canAttackPlayer(superHero)){
             demonKing.attack(damage,superHero);
-//            superHero.receiveDamage(damage);
             if(superHero.getHp() == 0){
                 System.out.println(superHero.name + "は倒られた、戦闘終了。");
                 System.out.println("ゲームオーバー！");
