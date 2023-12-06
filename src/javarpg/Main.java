@@ -151,7 +151,7 @@ public class Main {
                battleloop = true;
                while(battleloop){
             	    System.out.println("**** 勇者のHP:" + superHero.getHp() +" | "+ monster.getName() + "のHP:" + monster.getHp() + " ****");
-                    System.out.println("スーパー勇者(" + heroName + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を⾶ぶ 5.着陸する」:");
+                    System.out.println("スーパー勇者(" + heroName + ")に指示を出してください「1.戦う 2.眠る 3.逃げる 4.空を飛ぶ 5.着陸する」:");
                     actionNum = scanner.nextInt();
                     battleloop = superAction(actionNum, superHero, monster);
                     if(!battleloop){break;}
