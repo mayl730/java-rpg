@@ -162,6 +162,7 @@ public class Main {
                     
                 }
         }
+        System.out.println(princess.getName() + ":　"+ heroName + "さん、感謝します！");
         System.out.println("あなたの勝ちた！冒険終了！");
         scanner.close();
     }
