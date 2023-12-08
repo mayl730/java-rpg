@@ -274,14 +274,17 @@ public class Main {
         switch (enemyNum) {
             case 0:
                 monster = new Slime();
+                monster.setName(enemies[0]);
                 monster.setHp(50);
                 break;
             case 1:
                 monster = new Goblin();
+                monster.setName(enemies[1]);
                 monster.setHp(100);
                 break;
             case 2:
                 monster = new Wolfman();
+                monster.setName(enemies[2]);
                 monster.setHp(150);	
                 break;
             default:
