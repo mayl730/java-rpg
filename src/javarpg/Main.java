@@ -55,6 +55,7 @@ public class Main {
         boolean battleloop = false;
         boolean withWizard = false;
         int actionNum = 0;
+        boolean princessCheered = false;
         
         /******** ゲーム開始 ********/
         System.out.println("勇者の名前を付けて下さい: ");
@@ -159,7 +160,10 @@ public class Main {
                     if(!battleloop){break;}
                     battleloop = monsterAction(superHero, monster, 10);
                     if(!battleloop){break;}
-                    
+                    if (!princessCheered) {
+                    	princess.cheer(superHero);
+                    	princessCheered = true;
+                    }                    
                 }
         }
         System.out.println(princess.getName() + ":　"+ heroName + "さん、感謝します！");
